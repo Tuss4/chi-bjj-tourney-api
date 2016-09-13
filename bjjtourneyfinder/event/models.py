@@ -7,8 +7,9 @@ class Event(models.Model):
     website = models.URLField()
     early_registration = models.DateField(null=True)
     reg_registration = models.DateField()
-    added = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
