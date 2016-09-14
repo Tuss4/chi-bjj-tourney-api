@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from event.views import EventViewSet
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.trailing_slash = '/?'
+router.register(r'v1/event', EventViewSet, base_name='event')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
+
+urlpatterns += router.urls
