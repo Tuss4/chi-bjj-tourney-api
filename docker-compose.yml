@@ -12,9 +12,7 @@ services:
             - .:/code
         ports:
             - "8000:8000"
-        links:
+        depends_on:
             - db
         env_file:
             - ./secret_env/local.env
-        environment:
-            - DB_ADDR=db

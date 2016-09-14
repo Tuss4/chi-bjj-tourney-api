@@ -12,7 +12,7 @@ class Event(models.Model):
     approved = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     early_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    author = models.ForeignKey('usr.Profile', related_name='event')
+    author = models.ForeignKey('usrprofile.Profile', related_name='event')
 
     def __str__(self):
         return self.name
