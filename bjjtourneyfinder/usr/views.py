@@ -25,3 +25,10 @@ class LoginViewSet(viewsets.GenericViewSet):
             return Response(serializer.data)
         errors = {"errors": "Invalid credentials."}
         return Response(errors, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class RegisterViewSet(viewsets.GenericViewSet):
+
+    @list_route(methods=['POST'])
+    def register(self, request):
+        pass

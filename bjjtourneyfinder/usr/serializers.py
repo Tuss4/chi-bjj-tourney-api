@@ -28,3 +28,10 @@ class LoginSerializer(serializers.Serializer):
         obj['user'] = UserSerializer(instance=user).data
         obj['token'] = user.auth_token.key
         return obj
+
+
+class RegisterSerializer(serializers.Serializer):
+
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    
