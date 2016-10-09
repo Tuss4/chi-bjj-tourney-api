@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import list_route
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, RegisterSerializer
 from django.contrib.auth import get_user_model, authenticate, login
 
 
@@ -29,6 +29,16 @@ class LoginViewSet(viewsets.GenericViewSet):
 
 class RegisterViewSet(viewsets.GenericViewSet):
 
+    permission_classes = (AllowAny, )
+    serializer_class = RegisterSerializer
+    queryset = get_user_model().objects.all()
+
     @list_route(methods=['POST'])
     def register(self, request):
-        pass
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        valid_data = serializer.validated_data
+        user = get_user_model().objects.create_user(**valid_data)
+        # TODO: send activation email.
+        resp = {'id': user.pk, 'token': user.auth_token.key}
+        return Response(resp, status.HTTP_201_CREATED)

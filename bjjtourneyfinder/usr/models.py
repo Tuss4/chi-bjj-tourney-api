@@ -7,6 +7,7 @@ from .managers import UserManager
 class User(AbstractBaseUser):
 
     email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
