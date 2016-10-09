@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Event, EVENT_TYPES
+from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -19,4 +19,4 @@ class ModeratorEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', )
+        read_only_fields = ('id', 'created', 'updated', 'author')

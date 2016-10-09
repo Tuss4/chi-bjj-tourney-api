@@ -90,4 +90,9 @@ class EventTest(APITestCase):
         pass
 
     def test_delete(self):
-        pass
+        resp = self.client.post(self.list_route(), self.res_obj)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        obj_id = resp.data['id']
+
+        resp = self.client.delete(self.detail_route(obj_id))
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
