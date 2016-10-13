@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from copy import copy
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from rest_framework import status
@@ -23,9 +24,6 @@ class EventTest(APITestCase):
         self.user = get_user_model().objects.create_superuser(
             "luke.cage@harlem.io", "password1")
         Profile.objects.create(user=self.user, display_name="PowerMan")
-        self.reg = get_user_model().objects.create_user(
-            "misty.knight@harlem.io", "password1")
-        Profile.objects.create(user=self.reg, display_name="MistyKnight")
         self.client.force_authenticate(user=self.user)
 
     def list_route(self):
@@ -84,10 +82,25 @@ class EventTest(APITestCase):
         self.assertEqual(result['event_type'], TOURNAMENT)
 
     def test_update(self):
-        pass
+        resp = self.client.post(self.list_route(), self.res_obj)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        obj_id = resp.data['id']
+
+        o = copy(self.res_obj)
+        o['price'] = "109.99"
+
+        resp = self.client.put(self.detail_route(obj_id), o)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.data['price'], o['price'])
 
     def test_partial_update(self):
-        pass
+        resp = self.client.post(self.list_route(), self.res_obj)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        obj_id = resp.data['id']
+
+        resp = self.client.patch(self.detail_route(obj_id), {'price': "109.99"})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.data['price'], "109.99")
 
     def test_delete(self):
         resp = self.client.post(self.list_route(), self.res_obj)
@@ -96,3 +109,18 @@ class EventTest(APITestCase):
 
         resp = self.client.delete(self.detail_route(obj_id))
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class ModerateEvent(APITestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_superuser(
+            "luke.cage@harlem.io", "password1")
+        Profile.objects.create(user=self.user, display_name="PowerMan")
+        self.reg = get_user_model().objects.create_user(
+            "misty.knight@harlem.io", "password1")
+        Profile.objects.create(user=self.reg, display_name="MistyKnight")
+        self.client.force_authenticate(user=self.user)
+
+    def test_moderate_events(self):
+        pass

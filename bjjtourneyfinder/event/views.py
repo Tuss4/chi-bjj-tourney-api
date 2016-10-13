@@ -3,6 +3,7 @@ from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 from .serializers import EventSerializer, ModeratorEventSerializer
 from .models import Event
+from .permissions import ModeratorPermission
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -34,3 +35,4 @@ class ModerateEventViewSet(viewsets.ModelViewSet):
 
     serializer_class = ModeratorEventSerializer
     queryset = Event.objects.all()
+    permission_classes = [ModeratorPermission, ]
