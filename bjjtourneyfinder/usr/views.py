@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .serializers import LoginSerializer, RegisterSerializer
 from django.contrib.auth import get_user_model, authenticate, login
+from django.db import IntegrityError
 
 
 class LoginViewSet(viewsets.GenericViewSet):
@@ -14,17 +15,9 @@ class LoginViewSet(viewsets.GenericViewSet):
 
     @list_route(methods=['POST'])
     def login(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        valid_data = serializer.validated_data
-        user = authenticate(
-            username=valid_data.get('email'),
-            password=valid_data.get('password'))
-        if user is not None:
-            login(request, user)
-            return Response(serializer.data)
-        errors = {"errors": "Invalid credentials."}
-        return Response(errors, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.data)
 
 
 class RegisterViewSet(viewsets.GenericViewSet):
@@ -38,7 +31,10 @@ class RegisterViewSet(viewsets.GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         valid_data = serializer.validated_data
-        user = get_user_model().objects.create_user(**valid_data)
-        # TODO: send activation email.
-        resp = {'id': user.pk, 'token': user.auth_token.key}
-        return Response(resp, status.HTTP_201_CREATED)
+        try:
+            user = get_user_model().objects.create_user(**valid_data)
+            # TODO: send activation email.
+            resp = {'id': user.pk, 'token': user.auth_token.key}
+            return Response(resp, status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

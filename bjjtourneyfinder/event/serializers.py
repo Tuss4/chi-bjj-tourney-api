@@ -11,7 +11,7 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'author')
 
     def create(self, validated_data):
-        user = self.context['request'].user.profile
+        user = self.context['request'].user
         return Event.objects.create(author=user, **validated_data)
 
 

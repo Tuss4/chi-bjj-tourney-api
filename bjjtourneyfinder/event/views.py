@@ -34,5 +34,5 @@ class EventViewSet(viewsets.ModelViewSet):
 class ModerateEventViewSet(viewsets.ModelViewSet):
 
     serializer_class = ModeratorEventSerializer
-    queryset = Event.objects.all()
+    queryset = Event.objects.filter(approved=False)
     permission_classes = [ModeratorPermission, ]

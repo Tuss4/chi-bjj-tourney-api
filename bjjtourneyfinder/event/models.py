@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 TOURNAMENT = 'T'
@@ -21,7 +22,7 @@ class Event(models.Model):
     approved = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     early_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    author = models.ForeignKey('usrprofile.Profile', related_name='event')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='event')
     event_type = models.CharField(max_length=1, choices=EVENT_TYPES, default=TOURNAMENT)
 
     def __str__(self):

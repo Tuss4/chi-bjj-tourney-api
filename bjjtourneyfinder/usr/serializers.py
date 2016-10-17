@@ -1,20 +1,20 @@
 from rest_framework import serializers
-from .models import User
 from collections import OrderedDict
+from django.contrib.auth import get_user_model, authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('id', 'email')
         read_only_fields = ('id', 'email')
 
 
 class LoginSerializer(serializers.Serializer):
 
-    email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
     token = serializers.CharField(read_only=True)
     user = UserSerializer(read_only=True)
 
@@ -22,16 +22,16 @@ class LoginSerializer(serializers.Serializer):
         value = value.lower()
         return value
 
-    def to_representation(self, instance):
-        obj = OrderedDict()
-        user = User.objects.get(email=instance.get('email').lower())
-        obj['user'] = UserSerializer(instance=user).data
-        obj['token'] = user.auth_token.key
-        return obj
+    def validate(self, data):
+        user = authenticate(username=data.get('email'), password=data.get('password'))
+        if not user:
+            raise serializers.ValidationError('Invalid Credentials')
+        data['token'] = user.auth_token.key
+        data['user'] = UserSerializer(user).data
+        return data
 
 
 class RegisterSerializer(serializers.Serializer):
 
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
-    
