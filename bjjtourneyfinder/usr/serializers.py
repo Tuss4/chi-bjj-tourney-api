@@ -35,3 +35,13 @@ class RegisterSerializer(serializers.Serializer):
 
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+
+    email = serializers.EmailField(write_only=True)
+
+
+class PasswordResetSerializer(serializers.Serializer):
+
+    new_password = serializers.CharField(write_only=True)

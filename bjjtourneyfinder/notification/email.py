@@ -37,7 +37,7 @@ class TourneyEmail(object):
         return self.send_email(user.email, CONFIRM_SUBJECT, body)
 
     def send_password_reset(self, user, token):
-        body = PASSWORD_RESET_EMAIL.format(user.email, token.token)
+        body = PASSWORD_RESET_EMAIL.format(token.token)
         return self.send_email(user.email, PASSWORD_SUBJECT, body)
 
     def send_email(self, to, subject, body_text):

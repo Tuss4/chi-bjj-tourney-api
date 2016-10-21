@@ -2,10 +2,11 @@ from rest_framework import viewsets, status, views
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from .serializers import LoginSerializer, RegisterSerializer
+from .serializers import (
+    LoginSerializer, RegisterSerializer, ForgotPasswordSerializer, PasswordResetSerializer)
 from django.contrib.auth import get_user_model, authenticate, login
 from django.db import IntegrityError
-from usrtoken.models import ConfirmationToken
+from usrtoken.models import ConfirmationToken, PasswordToken
 from notification.email import TourneyEmail
 
 
@@ -52,6 +53,7 @@ class ConfirmationView(views.APIView):
         ctoken = ConfirmationToken.objects.get(token=token)
         if not ctoken.is_expired:
             ctoken.user.is_active = True
+            ctoken.user.save()
             ctoken.delete()
             resp = {'confirmed': True}
             return Response(resp, status=status.HTTP_200_OK)
@@ -61,11 +63,31 @@ class ConfirmationView(views.APIView):
 class ForgotPasswordView(views.APIView):
 
     permission_classes = (AllowAny, )
+    serializer_class = ForgotPasswordSerializer
+    emailer = TourneyEmail()
 
     def post(self, request):
-        pass
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = get_user_model().objects.get(email=serializer.validated_data.get('email'))
+        ptoken = PasswordToken.objects.create(user=user)
+        self.emailer.send_password_reset(user, ptoken)
+        return Response(status=status.HTTP_200_OK)
 
 
-class ResetPasswordView(views.APIView):
+class PasswordResetView(views.APIView):
 
-    pass
+    permission_classes = (AllowAny, )
+    serializer_class = PasswordResetSerializer
+
+    def post(self, request, token=None):
+        ptoken = PasswordToken.objects.get(token=token)
+        serializer = self.serializer_class(data=request.data)
+        if not ptoken.is_expired:
+            serializer.is_valid(raise_exception=True)
+            newp = serializer.validated_data.get('new_password')
+            ptoken.user.set_password(newp)
+            ptoken.user.save()
+            ptoken.delete()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

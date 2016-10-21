@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from event.views import EventViewSet, ModerateEventViewSet
-from usr.views import LoginViewSet, RegisterViewSet, ConfirmationView
+from usr.views import (
+    LoginViewSet, RegisterViewSet, ConfirmationView, ForgotPasswordView, PasswordResetView)
 from rest_framework import routers
 
 router = routers.SimpleRouter()
@@ -29,6 +30,9 @@ router.register(r'v1/user', RegisterViewSet, base_name='user')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^v1/confirm/(?P<token>[-\w]+)/?$', ConfirmationView().as_view(), name='user-confirm'),
+    url(r'^v1/forgot/?$', ForgotPasswordView().as_view(), name='user-forgot-password'),
+    url(r'^v1/reset/(?P<token>[-\w]+)/?$', PasswordResetView().as_view(),
+        name='user-password-reset'),
 ]
 
 urlpatterns += router.urls
