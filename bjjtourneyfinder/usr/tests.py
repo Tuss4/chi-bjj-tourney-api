@@ -39,6 +39,8 @@ class UsrTest(APITestCase):
 
     def test_login(self):
         user = get_user_model().objects.create_user(**self.usr_data)
+        user.is_active = True
+        user.save()
         url = reverse('user-login')
         resp = self.client.post(url, self.usr_data)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)

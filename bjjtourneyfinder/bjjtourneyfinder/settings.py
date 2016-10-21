@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'usr',
     'event',
-    'usrprofile'
+    'usrprofile',
+    'usrtoken'
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,17 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'PAGINATE_BY_PARAM': 'page_size'
 }
+
+# Elastic Email settings
+ELASTIC_EMAIL_URL = 'https://api.elasticemail.com/mailer/send'
+ELASTIC_EMAIL_USERNAME = os.getenv('ELASTIC_EMAIL_USERNAME', '')
+ELASTIC_EMAIL_API_KEY = os.getenv('ELASTIC_EMAIL_API_KEY', '')
+ELASTIC_EMAIL_FROM_NAME = 'TourneyFinder'
+ELASTIC_EMAIL_FROM = os.getenv('ELASTIC_EMAIL_FROM', '')
+
+# Postmark settings
+POSTMARK_API_TOKEN = os.getenv('POSTMARK_API_TOKEN', '')
+POSTMARK_URL = 'https://api.postmarkapp.com/email'
+
+# GenericToken
+EXPIRY = 2
