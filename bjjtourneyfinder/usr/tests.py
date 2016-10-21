@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
+from unittest.mock import patch
 
 
 class UsrTest(APITestCase):
@@ -47,3 +48,9 @@ class UsrTest(APITestCase):
         self.assertEqual(resp.data['token'], user.auth_token.key)
         self.assertEqual(resp.data['user']['id'], user.id)
         self.assertEqual(resp.data['user']['email'], self.usr_data['email'])
+
+    def test_confirm_account(self):
+        pass
+
+    def test_password_reset(self):
+        pass
