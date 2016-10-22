@@ -3,6 +3,8 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from unittest.mock import patch
+from usrtoken.models import ConfirmationToken
+from .views import TourneyEmail
 
 
 class UsrTest(APITestCase):
@@ -50,7 +52,21 @@ class UsrTest(APITestCase):
         self.assertEqual(resp.data['user']['email'], self.usr_data['email'])
 
     def test_confirm_account(self):
-        pass
+        url = reverse('user-register')
+        with patch.object(TourneyEmail, 'send_email', return_value=None) as me:
+            resp = self.client.post(url, self.usr_data)
+        self.assertTrue(me.called)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        user = get_user_model().objects.get(email=self.usr_data['email'])
+        self.assertFalse(user.is_active)
+        self.assertTrue(ConfirmationToken.objects.filter(user=user).exists())
+        ctoken = ConfirmationToken.objects.get(user=user)
+
+        url = reverse('user-confirm', kwargs={'token': ctoken.token})
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        user = get_user_model().objects.get(email=self.usr_data['email'])
+        self.assertTrue(user.is_active)
 
     def test_password_reset(self):
         pass
