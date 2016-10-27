@@ -5,15 +5,6 @@ from datetime import timedelta
 import uuid
 
 
-CONFIRMATION = 'C'
-PASSWORD = 'P'
-
-TOKEN_TYPES = (
-    (CONFIRMATION, 'Confirmation'),
-    (PASSWORD, 'Password')
-)
-
-
 class GenericToken(models.Model):
 
     token = models.UUIDField(default=uuid.uuid4)
