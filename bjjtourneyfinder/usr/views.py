@@ -57,7 +57,8 @@ class ConfirmationView(views.APIView):
             ctoken.delete()
             resp = {'confirmed': True}
             return Response(resp, status=status.HTTP_200_OK)
-        return Response(status.HTTP_400_BAD_REQUEST)
+        ctoken.delete()
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ForgotPasswordView(views.APIView):
@@ -90,4 +91,5 @@ class PasswordResetView(views.APIView):
             ptoken.user.save()
             ptoken.delete()
             return Response(status=status.HTTP_200_OK)
+        ptoken.delete()
         return Response(status=status.HTTP_400_BAD_REQUEST)
