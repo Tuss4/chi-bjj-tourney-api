@@ -10,5 +10,4 @@ env:
     - DATABASE_URL=postgres://postgres@localhost:5432/test SECRET_KEY=testing DEBUG=True
 script:
     - cd bjjtourneyfinder
-    - printenv
     - python manage.py test
