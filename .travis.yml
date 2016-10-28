@@ -9,5 +9,5 @@ before_script:
 env:
     - DATABASE_URL=postgres@localhost:5432/test SECRET_KEY=testing DEBUG=True
 script:
-    - pwd
-    - ls
+    - cd bjjtourneyfinder
+    - python manage.py test
