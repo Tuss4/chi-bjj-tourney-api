@@ -11,3 +11,5 @@ env:
 script:
     - cd bjjtourneyfinder
     - python manage.py test
+after_success:
+    - echo "SUCCESS!"
