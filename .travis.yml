@@ -3,6 +3,7 @@ python:
     - "3.5"
 services:
     - postgresql
+    - docker
 install: "pip install -r requirements.txt"
 before_script:
     - psql -c 'create database test;' -U postgres
@@ -12,4 +13,4 @@ script:
     - cd bjjtourneyfinder
     - python manage.py test
 after_success:
-    - echo "BRUH"
+    - cd ../ && ls
