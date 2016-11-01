@@ -7,3 +7,5 @@ RUN pip install -r requirements.txt
 ADD . /code/
 WORKDIR /code/bjjtourneyfinder
 
+EXPOSE 8000
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "bjjtourneyfinder.wsgi"]
