@@ -63,6 +63,11 @@ class EventTest(APITestCase):
         self.assertEqual(resp.data['count'], 1)
         self.assertEqual(resp.data['results'][0]['id'], obj_id)
 
+        self.client.force_authenticate(user=None)
+        resp = self.client.get(self.list_route())
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.data['count'], 1)
+
     def test_retrieve(self):
         resp = self.client.post(self.list_route(), self.res_obj)
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
