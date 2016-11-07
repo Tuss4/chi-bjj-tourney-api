@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 TOURNAMENT = 'T'
@@ -24,6 +25,8 @@ class Event(models.Model):
     early_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='event')
     event_type = models.CharField(max_length=1, choices=EVENT_TYPES, default=TOURNAMENT)
+    start_date = models.DateField()
+    end_date = models.DateField()
 
     def __str__(self):
         return self.name

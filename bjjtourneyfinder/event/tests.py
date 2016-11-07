@@ -17,7 +17,9 @@ class EventTest(APITestCase):
         "registration_date": date.today() + timedelta(weeks=12),
         "early_price": "89.99",
         "price": "99.99",
-        "event_type": TOURNAMENT
+        "event_type": TOURNAMENT,
+        "start_date": date.today() + timedelta(weeks=24),
+        "end_date": date.today() + timedelta(weeks=24)
     }
 
     def setUp(self):
@@ -124,7 +126,9 @@ class ModerateEvent(APITestCase):
         "registration_date": date.today() + timedelta(weeks=12),
         "early_price": "89.99",
         "price": "99.99",
-        "event_type": TOURNAMENT
+        "event_type": TOURNAMENT,
+        "start_date": date.today() + timedelta(weeks=24),
+        "end_date": date.today() + timedelta(weeks=24)
     }
 
     res_obj_2 = {
@@ -134,7 +138,9 @@ class ModerateEvent(APITestCase):
         "registration_date": date.today() + timedelta(weeks=18),
         "early_price": "79.99",
         "price": "109.99",
-        "event_type": TOURNAMENT
+        "event_type": TOURNAMENT,
+        "start_date": date.today() + timedelta(weeks=24),
+        "end_date": date.today() + timedelta(weeks=24)
     }
 
     def setUp(self):
