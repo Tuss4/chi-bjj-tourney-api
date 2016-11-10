@@ -160,4 +160,5 @@ EXPIRY = 2
 CORS_ORIGIN_REGEX_WHITELIST = (
     '^(http(s)?\:\/\/)?localhost(\:\d{1,5})?$',
     '^(https?://)?([\w-]+\.)+tourneyfinder\.com$',
+    '^(https?://)?([\w-]+\.)+ngrok\.io$',
 )
