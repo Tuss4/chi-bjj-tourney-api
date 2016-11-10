@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     'usr',
     'event',
     'usrprofile',
-    'usrtoken'
+    'usrtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -154,3 +156,8 @@ POSTMARK_URL = 'https://api.postmarkapp.com/email'
 
 # GenericToken
 EXPIRY = 2
+
+CORS_ORIGIN_REGEX_WHITELIST = (
+    '^(http(s)?\:\/\/)?localhost(\:\d{1,5})?$',
+    '^(https?://)?([\w-]+\.)+tourneyfinder\.com$',
+)
