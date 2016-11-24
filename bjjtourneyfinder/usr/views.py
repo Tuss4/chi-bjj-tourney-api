@@ -6,6 +6,7 @@ from .serializers import (
     LoginSerializer, RegisterSerializer, ForgotPasswordSerializer, PasswordResetSerializer)
 from django.contrib.auth import get_user_model, authenticate, login
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 from usrtoken.models import ConfirmationToken, PasswordToken
 from notification.email import TourneyEmail
 
@@ -50,7 +51,7 @@ class ConfirmationView(views.APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, token=None):
-        ctoken = ConfirmationToken.objects.get(token=token)
+        ctoken = get_object_or_404(ConfirmationToken, token=token)
         if not ctoken.is_expired:
             ctoken.user.is_active = True
             ctoken.user.save()
@@ -82,7 +83,7 @@ class PasswordResetView(views.APIView):
     serializer_class = PasswordResetSerializer
 
     def post(self, request, token=None):
-        ptoken = PasswordToken.objects.get(token=token)
+        ptoken = get_object_or_404(PasswordToken, token=token)
         serializer = self.serializer_class(data=request.data)
         if not ptoken.is_expired:
             serializer.is_valid(raise_exception=True)
