@@ -8,7 +8,7 @@ Hello {0},
 
 Before you can enjoy everything TourneyFinder has to offer,
 please confirm your account at the following link:
-https://tourneyfinder.com/#/confirm/{1}
+https://7927ab9d.ngrok.io/#/confirm/{1}
 
 Thank you,
 
