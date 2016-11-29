@@ -30,3 +30,7 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_permalink(self):
+        return "/#/event/{}".format(self.id)

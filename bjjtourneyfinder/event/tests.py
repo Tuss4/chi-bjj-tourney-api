@@ -86,6 +86,7 @@ class EventTest(APITestCase):
         self.assertEqual(result['price'], self.res_obj['price'])
         self.assertEqual(result['early_price'], self.res_obj['early_price'])
         self.assertEqual(result['event_type'], TOURNAMENT)
+        self.assertEqual(result['permalink'], '/#/event/{}'.format(obj_id))
 
     def test_update(self):
         resp = self.client.post(self.list_route(), self.res_obj)
