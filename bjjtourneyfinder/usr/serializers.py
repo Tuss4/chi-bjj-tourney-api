@@ -17,6 +17,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, required=True)
     token = serializers.CharField(read_only=True)
     user = UserSerializer(read_only=True)
+    moderator = serializers.BooleanField(read_only=True)
 
     def validate_email(self, value):
         value = value.lower()
@@ -28,6 +29,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid Credentials')
         data['token'] = user.auth_token.key
         data['user'] = UserSerializer(user).data
+        data['moderator'] = user.is_staff
         return data
 
 

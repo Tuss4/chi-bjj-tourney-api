@@ -53,6 +53,7 @@ class UsrTest(APITestCase):
         self.assertEqual(resp.data['token'], user.auth_token.key)
         self.assertEqual(resp.data['user']['id'], user.id)
         self.assertEqual(resp.data['user']['email'], self.usr_data['email'])
+        self.assertFalse(resp.data['moderator'])
 
     def test_confirm_account(self):
         url = reverse('user-register')
