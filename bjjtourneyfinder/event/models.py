@@ -34,3 +34,6 @@ class Event(models.Model):
     @property
     def get_permalink(self):
         return "/#/event/{}".format(self.id)
+
+    class Meta:
+        ordering = ["-start_date"]
