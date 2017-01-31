@@ -37,3 +37,13 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["-start_date"]
+
+
+class EventLocation(models.Model):
+
+    event = models.ForeignKey('event.Event', related_name="location")
+    address = models.CharField(max_length=255, default="")
+    city = models.CharField(max_length=255, default="")
+    state_province = models.CharField(max_length=255, default="")
+    country = models.CharField(max_length=3)
+    zipcode = models.CharField(max_length=10)

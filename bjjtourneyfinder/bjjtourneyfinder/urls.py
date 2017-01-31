@@ -18,6 +18,7 @@ from django.contrib import admin
 from event.views import EventViewSet, ModerateEventViewSet
 from usr.views import (
     LoginViewSet, RegisterViewSet, ConfirmationView, ForgotPasswordView, PasswordResetView)
+from util.views import PingView
 from rest_framework import routers
 
 router = routers.SimpleRouter()
@@ -28,6 +29,7 @@ router.register(r'v1/user', LoginViewSet, base_name='user')
 router.register(r'v1/user', RegisterViewSet, base_name='user')
 
 urlpatterns = [
+    url(r'^/?$', PingView().as_view(), name='ping-view'),
     url(r'^admin/', admin.site.urls),
     url(r'^v1/confirm/(?P<token>[-\w]+)/?$', ConfirmationView().as_view(), name='user-confirm'),
     url(r'^v1/forgot/?$', ForgotPasswordView().as_view(), name='user-forgot-password'),
