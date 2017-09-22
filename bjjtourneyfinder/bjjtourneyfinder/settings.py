@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') in ['true', 'True'] else False
 
-ALLOWED_HOSTS = ['.tourneyfinder.com', ]
+ALLOWED_HOSTS = ['.tourneyfinder.com', '52.14.32.163', '0.0.0.0']
 
 
 # Application definition
