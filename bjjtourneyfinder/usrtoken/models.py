@@ -9,7 +9,8 @@ class GenericToken(models.Model):
 
     token = models.UUIDField(default=uuid.uuid4)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    expires = models.DateTimeField(default=timezone.now() + timedelta(days=settings.EXPIRY))
+    expires = models.DateTimeField(
+        default=timezone.now() + timedelta(days=settings.EXPIRY))
 
     @property
     def is_expired(self):

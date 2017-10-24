@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import (
     LoginSerializer, RegisterSerializer, ForgotPasswordSerializer, PasswordResetSerializer)
 from django.contrib.auth import get_user_model, authenticate, login
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from usrtoken.models import ConfirmationToken, PasswordToken
@@ -51,15 +52,18 @@ class ConfirmationView(views.APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, token=None):
-        ctoken = get_object_or_404(ConfirmationToken, token=token)
-        if not ctoken.is_expired:
-            ctoken.user.is_active = True
-            ctoken.user.save()
+        try:
+            ctoken = ConfirmationToken.objects.filter(token=token).first()
+            if not ctoken.is_expired:
+                ctoken.user.is_active = True
+                ctoken.user.save()
+                ctoken.delete()
+                resp = {'confirmed': True}
+                return Response(resp, status=status.HTTP_200_OK)
             ctoken.delete()
-            resp = {'confirmed': True}
-            return Response(resp, status=status.HTTP_200_OK)
-        ctoken.delete()
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ForgotPasswordView(views.APIView):

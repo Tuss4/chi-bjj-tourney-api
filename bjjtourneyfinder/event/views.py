@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .serializers import EventSerializer, ModeratorEventSerializer
 from .models import Event
 from .permissions import EventPermission, ModeratorPermission
+from datetime import date
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -12,10 +13,11 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [EventPermission, ]
 
     def get_queryset(self):
-        return Event.objects.all()
+        return Event.objects.filter(end_date__gte=date.today())
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset().filter(approved=True))
+        queryset = self.filter_queryset(
+            self.get_queryset().filter(approved=True))
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -26,7 +28,8 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer = self.get_serializer(
+            data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

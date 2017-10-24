@@ -8,7 +8,7 @@ Hello {0},
 
 Before you can enjoy everything TourneyFinder has to offer,
 please confirm your account at the following link:
-https://tourneyfinder.com/#/confirm/{1}
+http://tourneyfinder.com/#/confirm/{1}
 
 Thank you,
 
@@ -20,7 +20,7 @@ CONFIRM_SUBJECT = "Please Confirm Your TourneyFinder Account"
 PASSWORD_RESET_EMAIL = """
 Please click the following link to reset your password:
 
-https://tourneyfinder.com/#/password-reset/{0}
+http://tourneyfinder.com/#/password-reset/{0}
 
 Thank you,
 
