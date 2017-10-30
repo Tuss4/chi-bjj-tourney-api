@@ -25,4 +25,5 @@ class ModeratorEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
+        fields = ('approved', )
         read_only_fields = ('id', 'created', 'updated', 'author')

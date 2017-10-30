@@ -52,8 +52,8 @@ class ConfirmationView(views.APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, token=None):
-        try:
-            ctoken = ConfirmationToken.objects.filter(token=token).first()
+        ctoken = ConfirmationToken.objects.filter(token=token).first()
+        if ctoken:
             if not ctoken.is_expired:
                 ctoken.user.is_active = True
                 ctoken.user.save()
@@ -62,8 +62,7 @@ class ConfirmationView(views.APIView):
                 return Response(resp, status=status.HTTP_200_OK)
             ctoken.delete()
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ForgotPasswordView(views.APIView):
