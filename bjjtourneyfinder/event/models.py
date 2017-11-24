@@ -14,7 +14,7 @@ EVENT_TYPES = (
 
 class Event(models.Model):
 
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     website = models.URLField()
     early_registration_date = models.DateField(null=True)
     registration_date = models.DateField()
