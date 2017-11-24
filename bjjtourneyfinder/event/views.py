@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
-from .serializers import EventSerializer, ModeratorEventSerializer
+from .serializers import (
+    EventSerializer, ModeratorEventSerializer, CreateEventSerializer)
 from .models import Event
 from .permissions import EventPermission, ModeratorPermission
 from datetime import date
@@ -28,11 +29,11 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(
+        srlzr = CreateEventSerializer(
             data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        srlzr.is_valid(raise_exception=True)
+        srlzr.save()
+        return Response(srlzr.data, status=status.HTTP_201_CREATED)
 
 
 class ModerateEventViewSet(viewsets.ModelViewSet):

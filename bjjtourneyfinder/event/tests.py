@@ -19,7 +19,12 @@ class EventTest(APITestCase):
         "price": "99.99",
         "event_type": TOURNAMENT,
         "start_date": date.today() + timedelta(weeks=24),
-        "end_date": date.today() + timedelta(weeks=24)
+        "end_date": date.today() + timedelta(weeks=24),
+        "address": "123 W Fake ST",
+        "city": "Chicago",
+        "state_province": "IL",
+        "zipcode": "60613",
+        "country": "USA"
     }
 
     def setUp(self):

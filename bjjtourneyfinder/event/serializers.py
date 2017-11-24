@@ -35,19 +35,21 @@ class CreateEventSerializer(serializers.Serializer):
     website = serializers.URLField()
     early_registration_date = serializers.DateField(required=False)
     registration_date = serializers.DateField()
-    price = serializers.IntegerField()
-    early_price = serializers.IntegerField(required=False)
+    price = serializers.DecimalField(max_digits=5, decimal_places=2)
+    early_price = serializers.DecimalField(
+        max_digits=5, decimal_places=2, required=False)
     start_date = serializers.DateField()
     end_date = serializers.DateField()
     event_type = serializers.ChoiceField(choices=EVENT_TYPES)
-    address = serializers.CharField()
-    city = serializers.CharField()
-    state_province = serializers.CharField()
-    country = serializers.CharField()
-    zipcode = serializers.CharField()
+    address = serializers.CharField(required=False)
+    city = serializers.CharField(required=False)
+    state_province = serializers.CharField(required=False)
+    country = serializers.CharField(required=False)
+    zipcode = serializers.CharField(required=False)
 
     def create(self, validated_data):
         event_dict = {
+            "author": self.context['request'].user,
             "name": validated_data.get('name'),
             "website": validated_data.get('website'),
             "early_registration_date": validated_data.get('early_registration_date'),
